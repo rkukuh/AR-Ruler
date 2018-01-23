@@ -39,4 +39,38 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         // Pause the view's session
         sceneView.session.pause()
     }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        
+        print("########## \n \(touches) \n ##########")
+        
+        if let touchLocation = touches.first?.location(in: sceneView) {
+            
+            let locations = sceneView.hitTest(touchLocation, types: .featurePoint)
+            
+            if let location = locations.first {
+                
+                addCircle(at: location)
+            }
+        }
+    }
+    
+    func addCircle(at location : ARHitTestResult) {
+        
+        let circle = SCNSphere(radius: 0.005)
+        let material = SCNMaterial()
+        
+        material.diffuse.contents = UIColor.red
+        circle.materials = [material]
+        
+        let circleNode = SCNNode(geometry: circle)
+        
+        circleNode.position = SCNVector3(
+            x: location.worldTransform.columns.3.x,
+            y: location.worldTransform.columns.3.y,
+            z: location.worldTransform.columns.3.z
+        )
+        
+        sceneView.scene.rootNode.addChildNode(circleNode)
+    }
 }
