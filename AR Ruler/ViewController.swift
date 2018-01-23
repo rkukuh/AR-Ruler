@@ -13,6 +13,7 @@ import ARKit
 class ViewController: UIViewController, ARSCNViewDelegate {
     
     var circles = [SCNNode]()
+    var textNode = SCNNode()
 
     @IBOutlet var sceneView: ARSCNView!
     
@@ -45,6 +46,14 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
         print("########## \n \(touches) \n ##########")
+        
+        if circles.count == 2 {
+            for circle in circles {
+                circle.removeFromParentNode()
+            }
+            
+            circles = [SCNNode]()
+        }
         
         if let touchLocation = touches.first?.location(in: sceneView) {
             
@@ -105,11 +114,13 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     
     func showDistance(text : String, at position : SCNVector3) {
         
+        textNode.removeFromParentNode()
+        
         let textGeometry = SCNText(string: "\(text) cm", extrusionDepth: 1.0)
         
         textGeometry.firstMaterial?.diffuse.contents = UIColor.red
         
-        let textNode = SCNNode(geometry: textGeometry)
+        textNode = SCNNode(geometry: textGeometry)
         
         textNode.position = SCNVector3(
             x: position.x + 0.005,
