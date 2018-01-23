@@ -72,5 +72,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         )
         
         sceneView.scene.rootNode.addChildNode(circleNode)
+        
+        sceneView.autoenablesDefaultLighting = true
     }
 }
