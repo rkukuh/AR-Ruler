@@ -11,6 +11,8 @@ import SceneKit
 import ARKit
 
 class ViewController: UIViewController, ARSCNViewDelegate {
+    
+    var circles = [SCNNode]()
 
     @IBOutlet var sceneView: ARSCNView!
     
@@ -72,5 +74,32 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         )
         
         sceneView.scene.rootNode.addChildNode(circleNode)
+        
+        circles.append(circleNode)
+        
+        if circles.count == 2 {
+            
+            calculate()
+        }
+    }
+    
+    func calculate() {
+        
+        let start = circles[0]
+        let end = circles[1]
+        
+        print("START: \(start.position)")
+        print("END: \(end.position)")
+        
+        // NOTE: Calculate distance between 2 object in 3D
+        // d = √ (x2-x1)^2 * (y2-y1)^2 * (z2-z1)^2
+        
+        let distance = sqrt(
+            pow(end.position.x - start.position.x, 2) +
+            pow(end.position.y - start.position.y, 2) +
+            pow(end.position.z - start.position.z, 2)
+        )
+        
+        print("========== \n DISTANCE: \(distance * 100) cm \n ==========")
     }
 }
