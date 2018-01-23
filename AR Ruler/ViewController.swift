@@ -79,11 +79,11 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         
         if circles.count == 2 {
             
-            calculate()
+            calculateDistance()
         }
     }
     
-    func calculate() {
+    func calculateDistance() {
         
         let start = circles[0]
         let end = circles[1]
@@ -100,6 +100,25 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             pow(end.position.z - start.position.z, 2)
         )
         
-        print("========== \n DISTANCE: \(distance * 100) cm \n ==========")
+        showDistance(text: String(distance * 100), at: end.position)
+    }
+    
+    func showDistance(text : String, at position : SCNVector3) {
+        
+        let textGeometry = SCNText(string: "\(text) cm", extrusionDepth: 1.0)
+        
+        textGeometry.firstMaterial?.diffuse.contents = UIColor.red
+        
+        let textNode = SCNNode(geometry: textGeometry)
+        
+        textNode.position = SCNVector3(
+            x: position.x + 0.005,
+            y: position.y + 0.001,
+            z: position.z
+        )
+        
+        textNode.scale = SCNVector3(0.001, 0.001, 0.001)
+        
+        sceneView.scene.rootNode.addChildNode(textNode)
     }
 }
